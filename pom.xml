@@ -3,20 +3,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>rookit-data-model-test</artifactId>
 	<parent>
-		<groupId>org.rookit</groupId>
+		<groupId>com.github.JPDSousa</groupId>
 		<artifactId>rookit</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<dependencies>
 		<dependency>
-			<groupId>org.rookit</groupId>
+			<groupId>${rookit.group}</groupId>
 			<artifactId>rookit-data-model</artifactId>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.rookit</groupId>
+				<groupId>${rookit.group}</groupId>
 				<artifactId>rookit-data-model</artifactId>
 				<version>${rookit.version}</version>
 			</dependency>

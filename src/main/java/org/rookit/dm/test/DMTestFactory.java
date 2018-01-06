@@ -40,11 +40,13 @@ import org.rookit.dm.artist.ArtistFactory;
 import org.rookit.dm.artist.TypeArtist;
 import org.rookit.dm.genre.Genre;
 import org.rookit.dm.genre.GenreFactory;
+import org.rookit.dm.play.Playlist;
+import org.rookit.dm.play.PlaylistFactory;
+import org.rookit.dm.play.TypePlaylist;
 import org.rookit.dm.track.Track;
 import org.rookit.dm.track.TrackFactory;
 import org.rookit.dm.track.TypeTrack;
 import org.rookit.dm.track.TypeVersion;
-
 import com.google.common.collect.Sets;
 
 @SuppressWarnings("javadoc")
@@ -237,6 +239,14 @@ public final class DMTestFactory {
 			randomData.put(randomString(), randomString());
 		}
 		return randomData;
+	}
+
+	public Playlist getRandomPlaylist() {
+		return PlaylistFactory.getDefault().createPlaylist(TypePlaylist.STATIC, randomString());
+	}
+	
+	public Playlist getRandomUniquePlaylist(Playlist playlist) {
+		return getUnique(playlist, () -> getRandomPlaylist());
 	}
 
 	public List<String> getRandomDataList(int size){
