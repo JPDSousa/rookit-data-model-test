@@ -32,22 +32,20 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import org.apache.commons.text.RandomStringGenerator;
-import org.rookit.dm.album.Album;
-import org.rookit.dm.album.AlbumFactory;
-import org.rookit.dm.album.TypeRelease;
-import org.rookit.dm.artist.Artist;
-import org.rookit.dm.artist.ArtistFactory;
-import org.rookit.dm.artist.TypeArtist;
-import org.rookit.dm.genre.Genre;
-import org.rookit.dm.genre.GenreFactory;
-import org.rookit.dm.play.Playlist;
-import org.rookit.dm.play.PlaylistFactory;
-import org.rookit.dm.play.TypePlaylist;
-import org.rookit.dm.track.Track;
-import org.rookit.dm.track.TrackFactory;
-import org.rookit.dm.track.TypeTrack;
-import org.rookit.dm.track.TypeVersion;
+import org.rookit.api.dm.album.Album;
+import org.rookit.api.dm.album.TypeRelease;
+import org.rookit.api.dm.artist.Artist;
+import org.rookit.api.dm.artist.TypeArtist;
+import org.rookit.api.dm.factory.RookitFactories;
+import org.rookit.api.dm.genre.Genre;
+import org.rookit.api.dm.play.Playlist;
+import org.rookit.api.dm.track.Track;
+import org.rookit.api.dm.track.TypeTrack;
+import org.rookit.api.dm.track.TypeVersion;
+
 import com.google.common.collect.Sets;
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 
 @SuppressWarnings("javadoc")
 public final class DMTestFactory {
@@ -56,26 +54,31 @@ public final class DMTestFactory {
 	public static final Path TRACK_RESOURCE = TEST_RESOURCE.resolve("tracks").resolve("unparsed");
 	public static final Path FORMATS = TRACK_RESOURCE.getParent().resolve("testFormats");
 	private static final int RANDOM_LENGTH = 999999999;
-
-	private static DMTestFactory factory;
-
-	public static DMTestFactory getDefault(){
-		if(factory == null){
-			factory = new DMTestFactory();
-		}
-		return factory;
+	
+	public static AbstractModule getModule() {
+		return new AbstractModule() {
+			@Override
+			protected void configure() {
+				bind(DMTestFactory.class);
+			}
+		};
 	}
 	
 	private final RandomStringGenerator randomStringGenerator;
-	private final TrackFactory trackFactory;
+	private final RookitFactories factories;
 	
-	private DMTestFactory(){
+	@Inject
+	private DMTestFactory(RookitFactories factories){
+		this.factories = factories;
 		randomStringGenerator = new RandomStringGenerator.Builder()
 				.withinRange('a', 'z')
 				.build();
-		trackFactory = TrackFactory.getDefault();
 	}
 	
+	public RookitFactories getFactories() {
+		return factories;
+	}
+
 	private final <T> T getUnique(T item, Supplier<T> supplier) {
 		T another;
 		do {
@@ -109,7 +112,7 @@ public final class DMTestFactory {
 		final String title = randomString();
 		final Track original = getRandomOriginalTrack();
 		final TypeVersion versionType = TypeVersion.EXTENDED;
-		return trackFactory.createTrack(type, title, original, versionType);	
+		return factories.getTrackFactory().createTrack(type, title, original, versionType);	
 	}
 	
 	public final Track getRandomUniqueTrack(TypeTrack type, Track track) {
@@ -117,7 +120,7 @@ public final class DMTestFactory {
 	}
 	
 	private Track createOriginalTrack(String title, Set<Artist> mainArtists, Set<Artist> features, Set<Genre> genres) {
-		final Track track = trackFactory.createOriginalTrack(title);
+		final Track track = factories.getTrackFactory().createOriginalTrack(title);
 		track.setMainArtists(mainArtists);
 		track.setFeatures(features);
 		track.setGenres(genres);
@@ -144,7 +147,7 @@ public final class DMTestFactory {
 		final String title = "AlbumTest"+random.nextInt(RANDOM_LENGTH);
 		final Set<Artist> artists = getRandomSetOfArtists();
 		
-		return AlbumFactory.getDefault().createSingleArtistAlbum(title, type, artists);
+		return factories.getAlbumFactory().createSingleArtistAlbum(title, type, artists);
 	}
 	
 	public Album getRandomUniqueAlbum(Album album) {
@@ -180,7 +183,8 @@ public final class DMTestFactory {
 	public Artist getRandomArtist(){
 		Random random = new Random();
 		final TypeArtist type = TypeArtist.GROUP;
-		Artist artist = ArtistFactory.getDefault().createArtist(type, "art"+random.nextInt(RANDOM_LENGTH));
+		Artist artist = factories.getArtistFactory()
+				.createArtist(type, "art"+random.nextInt(RANDOM_LENGTH));
 		return artist;
 	}
 	
@@ -203,7 +207,7 @@ public final class DMTestFactory {
 
 	public Genre getRandomGenre(){
 		Random random = new Random();
-		return GenreFactory.getDefault().createGenre("Genre"+random.nextInt(RANDOM_LENGTH));
+		return factories.getGenreFactory().createGenre("Genre"+random.nextInt(RANDOM_LENGTH));
 	}
 	
 	public Genre getRandomUniqueGenre(Genre genre) {
@@ -242,7 +246,8 @@ public final class DMTestFactory {
 	}
 
 	public Playlist getRandomPlaylist() {
-		return PlaylistFactory.getDefault().createPlaylist(TypePlaylist.STATIC, randomString());
+		return factories.getPlaylistFactory()
+				.createStaticPlaylist(randomString());
 	}
 	
 	public Playlist getRandomUniquePlaylist(Playlist playlist) {
@@ -262,4 +267,5 @@ public final class DMTestFactory {
 	public String randomString() {
 		return randomStringGenerator.generate(20);
 	}
+	
 }
