@@ -44,7 +44,6 @@ import org.rookit.api.dm.track.TypeTrack;
 import org.rookit.api.dm.track.TypeVersion;
 
 import com.google.common.collect.Sets;
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 
 @SuppressWarnings("javadoc")
@@ -54,15 +53,6 @@ public final class DMTestFactory {
 	public static final Path TRACK_RESOURCE = TEST_RESOURCE.resolve("tracks").resolve("unparsed");
 	public static final Path FORMATS = TRACK_RESOURCE.getParent().resolve("testFormats");
 	private static final int RANDOM_LENGTH = 999999999;
-	
-	public static AbstractModule getModule() {
-		return new AbstractModule() {
-			@Override
-			protected void configure() {
-				bind(DMTestFactory.class);
-			}
-		};
-	}
 	
 	private final RandomStringGenerator randomStringGenerator;
 	private final RookitFactories factories;
