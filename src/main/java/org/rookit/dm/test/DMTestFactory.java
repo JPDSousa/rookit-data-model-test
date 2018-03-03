@@ -58,7 +58,7 @@ public final class DMTestFactory {
 	private final RookitFactories factories;
 	
 	@Inject
-	private DMTestFactory(RookitFactories factories){
+	private DMTestFactory(final RookitFactories factories){
 		this.factories = factories;
 		randomStringGenerator = new RandomStringGenerator.Builder()
 				.withinRange('a', 'z')
