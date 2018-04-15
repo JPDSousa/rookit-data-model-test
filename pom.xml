@@ -12,12 +12,21 @@
 			<groupId>${rookit.group}</groupId>
 			<artifactId>rookit-api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>${rookit.group}</groupId>
+			<artifactId>rookit-test</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>${rookit.group}</groupId>
 				<artifactId>rookit-api</artifactId>
+				<version>${rookit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${rookit.group}</groupId>
+				<artifactId>rookit-test</artifactId>
 				<version>${rookit.version}</version>
 			</dependency>
 		</dependencies>
