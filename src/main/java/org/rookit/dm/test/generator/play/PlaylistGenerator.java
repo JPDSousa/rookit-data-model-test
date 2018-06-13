@@ -3,34 +3,32 @@ package org.rookit.dm.test.generator.play;
 
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
+import org.rookit.api.dm.play.Playlist;
+import org.rookit.api.dm.play.factory.StaticPlaylistFactory;
+import org.rookit.dm.test.generator.IdGenerator;
+import org.rookit.dm.test.generator.play.able.AbstractPlayableGenerator;
+import org.rookit.test.generator.Generator;
 
+import javax.annotation.Generated;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import javax.annotation.Generated;
+final class PlaylistGenerator extends AbstractPlayableGenerator<Playlist> {
 
-import org.bson.types.ObjectId;
-import org.rookit.api.dm.play.Playlist;
-import org.rookit.api.dm.play.factory.PlaylistFactory;
-import org.rookit.dm.test.generator.play.able.AbstractPlayableGenerator;
-import org.rookit.test.generator.Generator;
-
-class PlaylistGenerator extends AbstractPlayableGenerator<Playlist> {
-
-    private final PlaylistFactory playlistFactory;
+    private final StaticPlaylistFactory playlistFactory;
 
     private final Generator<String> stringGenerator;
     private final Generator<byte[]> byteArrayGenerator;
 
     @Inject
-    private PlaylistGenerator(final PlaylistFactory playlistFactory,
-            final Generator<ObjectId> idGenerator,
-            final Generator<Duration> durationGenerator,
-            final Generator<LocalDate> pastGenerator,
-            final Generator<Long> longGenerator,
-            final Generator<String> stringGenerator,
-            final Generator<byte[]> byteArrayGenerator) {
+    private PlaylistGenerator(final StaticPlaylistFactory playlistFactory,
+                              @IdGenerator final Generator<String> idGenerator,
+                              final Generator<Duration> durationGenerator,
+                              final Generator<LocalDate> pastGenerator,
+                              final Generator<Long> longGenerator,
+                              final Generator<String> stringGenerator,
+                              final Generator<byte[]> byteArrayGenerator) {
         super(idGenerator, durationGenerator, pastGenerator, longGenerator);
         this.playlistFactory = playlistFactory;
         this.stringGenerator = stringGenerator;
@@ -72,8 +70,7 @@ class PlaylistGenerator extends AbstractPlayableGenerator<Playlist> {
 
     @Override
     protected Playlist constructRandom() {
-        return this.playlistFactory
-                .createStaticPlaylist(this.stringGenerator.createRandom());
+        return this.playlistFactory.create(this.stringGenerator.createRandom());
     }
 
     @Override

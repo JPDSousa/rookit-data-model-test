@@ -1,26 +1,22 @@
 
 package org.rookit.dm.test.generator;
 
-import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
-
 import com.google.common.base.MoreObjects;
-
-import java.util.Objects;
-
-import javax.annotation.Generated;
-
-import org.bson.types.ObjectId;
 import org.rookit.api.dm.RookitModel;
 import org.rookit.test.generator.AbstractGenerator;
 import org.rookit.test.generator.Generator;
 
+import javax.annotation.Generated;
+import java.util.Objects;
+
+import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
+
 @SuppressWarnings("javadoc")
 public abstract class AbstractRookitGenerator<T extends RookitModel> extends AbstractGenerator<T> {
 
-    private final Generator<ObjectId> idGenerator;
+    private final Generator<String> idGenerator;
 
-    protected AbstractRookitGenerator(final Generator<ObjectId> idGenerator) {
-        super();
+    protected AbstractRookitGenerator(final Generator<String> idGenerator) {
         this.idGenerator = idGenerator;
     }
 

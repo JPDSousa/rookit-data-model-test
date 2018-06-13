@@ -1,32 +1,31 @@
 
 package org.rookit.dm.test.generator.album;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
-
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
-
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.Set;
-
-import javax.annotation.Generated;
-
-import org.bson.types.ObjectId;
 import org.rookit.api.dm.album.Album;
+import org.rookit.api.dm.album.TypeAlbum;
 import org.rookit.api.dm.album.TypeRelease;
 import org.rookit.api.dm.album.factory.AlbumFactory;
 import org.rookit.api.dm.album.key.AlbumKey;
 import org.rookit.api.dm.artist.Artist;
 import org.rookit.api.dm.genre.Genre;
 import org.rookit.api.dm.track.Track;
+import org.rookit.dm.test.generator.IdGenerator;
 import org.rookit.dm.test.generator.genre.AbstractGenreableGenerator;
 import org.rookit.test.generator.Generator;
 
-class AlbumGenerator extends AbstractGenreableGenerator<Album> {
+import javax.annotation.Generated;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.Set;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
+
+final class AlbumGenerator extends AbstractGenreableGenerator<Album> {
 
     private static final int TRACK_COUNT = 10;
 
@@ -43,7 +42,7 @@ class AlbumGenerator extends AbstractGenreableGenerator<Album> {
     private AlbumGenerator(final AlbumFactory albumFactory,
             final Generator<Artist> artists,
             final Generator<TypeRelease> typeReleases,
-            final Generator<ObjectId> idGenerator,
+            @IdGenerator final Generator<String> idGenerator,
             final Generator<Duration> durationGenerator,
             final Generator<LocalDate> pastGenerator,
             final Generator<Genre> genreGenerator,
@@ -109,11 +108,12 @@ class AlbumGenerator extends AbstractGenreableGenerator<Album> {
         final String title = PREFIX + this.stringGenerator.createRandom();
 
         final AlbumKey key = mock(AlbumKey.class);
-        when(key.getType()).thenReturn(this.typeReleases.createRandom());
-        when(key.getTitle()).thenReturn(title);
-        when(key.getArtists()).thenReturn(artists);
+        when(key.type()).thenReturn(TypeAlbum.ARTIST);
+        when(key.releaseType()).thenReturn(this.typeReleases.createRandom());
+        when(key.title()).thenReturn(title);
+        when(key.artists()).thenReturn(artists);
 
-        return this.albumFactory.createSingleArtistAlbum(key);
+        return this.albumFactory.create(key);
     }
 
     @Override

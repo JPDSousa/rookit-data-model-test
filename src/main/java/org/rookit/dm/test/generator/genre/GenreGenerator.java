@@ -1,22 +1,20 @@
 
 package org.rookit.dm.test.generator.genre;
 
-import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
-
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
+import org.rookit.api.dm.genre.Genre;
+import org.rookit.api.dm.genre.factory.GenreFactory;
+import org.rookit.dm.test.generator.IdGenerator;
+import org.rookit.dm.test.generator.play.able.AbstractPlayableGenerator;
+import org.rookit.test.generator.Generator;
 
+import javax.annotation.Generated;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import javax.annotation.Generated;
-
-import org.bson.types.ObjectId;
-import org.rookit.api.dm.genre.Genre;
-import org.rookit.api.dm.genre.factory.GenreFactory;
-import org.rookit.dm.test.generator.play.able.AbstractPlayableGenerator;
-import org.rookit.test.generator.Generator;
+import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
 
 class GenreGenerator extends AbstractPlayableGenerator<Genre> {
 
@@ -27,7 +25,7 @@ class GenreGenerator extends AbstractPlayableGenerator<Genre> {
 
     @Inject
     private GenreGenerator(final GenreFactory genreFactory,
-            final Generator<ObjectId> idGenerator,
+            @IdGenerator final Generator<String> idGenerator,
             final Generator<Duration> durationGenerator,
             final Generator<LocalDate> pastGenerator,
             final Generator<Long> longGenerator,

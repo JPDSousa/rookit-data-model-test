@@ -3,23 +3,20 @@ package org.rookit.dm.test.generator.artist;
 
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
-
-import java.util.Objects;
-
-import javax.annotation.Generated;
-
 import org.rookit.api.dm.artist.Artist;
 import org.rookit.api.dm.artist.GroupArtist;
 import org.rookit.test.generator.AbstractGenerator;
 import org.rookit.test.generator.Generator;
 
-class ArtistGenerator extends AbstractGenerator<Artist> {
+import javax.annotation.Generated;
+import java.util.Objects;
+
+final class ArtistGenerator extends AbstractGenerator<Artist> {
 
     private final Generator<GroupArtist> groupArtistGenerator;
 
     @Inject
     private ArtistGenerator(final Generator<GroupArtist> groupArtistGenerator) {
-        super();
         this.groupArtistGenerator = groupArtistGenerator;
     }
 

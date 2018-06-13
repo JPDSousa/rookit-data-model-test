@@ -1,20 +1,17 @@
 
 package org.rookit.dm.test.generator.play.able;
 
-import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
-
 import com.google.common.base.MoreObjects;
+import org.rookit.api.dm.play.able.Playable;
+import org.rookit.dm.test.generator.AbstractRookitGenerator;
+import org.rookit.test.generator.Generator;
 
+import javax.annotation.Generated;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import javax.annotation.Generated;
-
-import org.bson.types.ObjectId;
-import org.rookit.api.dm.play.able.Playable;
-import org.rookit.dm.test.generator.AbstractRookitGenerator;
-import org.rookit.test.generator.Generator;
+import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
 
 @SuppressWarnings("javadoc")
 public abstract class AbstractPlayableGenerator<T extends Playable> extends AbstractRookitGenerator<T> {
@@ -23,7 +20,7 @@ public abstract class AbstractPlayableGenerator<T extends Playable> extends Abst
     private final Generator<LocalDate> pastGenerator;
     private final Generator<Long> longGenerator;
 
-    protected AbstractPlayableGenerator(final Generator<ObjectId> idGenerator,
+    protected AbstractPlayableGenerator(final Generator<String> idGenerator,
             final Generator<Duration> durationGenerator,
             final Generator<LocalDate> pastGenerator,
             final Generator<Long> longGenerator) {

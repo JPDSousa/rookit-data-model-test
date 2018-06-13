@@ -1,44 +1,45 @@
 
 package org.rookit.dm.test.generator.artist;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
+import com.neovisionaries.i18n.CountryCode;
+import org.rookit.api.dm.artist.Musician;
+import org.rookit.api.dm.artist.TypeArtist;
+import org.rookit.api.dm.artist.TypeGender;
+import org.rookit.api.dm.artist.factory.MusicianFactory;
+import org.rookit.api.dm.artist.key.ArtistKey;
+import org.rookit.api.dm.genre.Genre;
+import org.rookit.dm.test.generator.IdGenerator;
+import org.rookit.test.generator.Generator;
 
+import javax.annotation.Generated;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import javax.annotation.Generated;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.bson.types.ObjectId;
-import org.rookit.api.dm.artist.Musician;
-import org.rookit.api.dm.artist.TypeGender;
-import org.rookit.api.dm.artist.factory.ArtistFactory;
-import org.rookit.api.dm.artist.key.ArtistKey;
-import org.rookit.api.dm.genre.Genre;
-import org.rookit.test.generator.Generator;
+final class MusicianGenerator extends AbstractArtistGenerator<Musician> {
 
-class MusicianGenerator extends AbstractArtistGenerator<Musician> {
-
-    private final ArtistFactory artistFactory;
+    private final MusicianFactory artistFactory;
     private final Generator<TypeGender> genderGenerator;
     private final Generator<String> stringGenerator;
 
     @Inject
-    private MusicianGenerator(final ArtistFactory artistFactory,
+    private MusicianGenerator(final MusicianFactory artistFactory,
             final Generator<TypeGender> genderGenerator,
-            final Generator<ObjectId> idGenerator,
+            @IdGenerator final Generator<String> idGenerator,
             final Generator<Duration> durationGenerator,
             final Generator<LocalDate> pastGenerator,
             final Generator<Genre> genreGenerator,
             final Generator<Long> longGenerator,
             final Generator<String> stringGenerator,
-            final Generator<byte[]> byteArrayGenerator) {
+            final Generator<byte[]> byteArrayGenerator,
+            final Generator<CountryCode> countryCodeGenerator) {
         super(idGenerator, durationGenerator, pastGenerator, genreGenerator,
-                longGenerator, stringGenerator, byteArrayGenerator);
+                longGenerator, stringGenerator, byteArrayGenerator, countryCodeGenerator);
         this.artistFactory = artistFactory;
         this.genderGenerator = genderGenerator;
         this.stringGenerator = stringGenerator;
@@ -85,12 +86,13 @@ class MusicianGenerator extends AbstractArtistGenerator<Musician> {
         final String fullName = this.stringGenerator.createRandom();
 
         final ArtistKey mockedKey = mock(ArtistKey.class);
-        when(mockedKey.getName()).thenReturn(name);
-        when(mockedKey.getISNI()).thenReturn(isni);
-        when(mockedKey.getGender()).thenReturn(gender);
-        when(mockedKey.getFullName()).thenReturn(fullName);
+        when(mockedKey.type()).thenReturn(TypeArtist.MUSICIAN);
+        when(mockedKey.name()).thenReturn(name);
+        when(mockedKey.isni()).thenReturn(isni);
+        when(mockedKey.gender()).thenReturn(gender);
+        when(mockedKey.fullName()).thenReturn(fullName);
 
-        return this.artistFactory.createMusician(mockedKey);
+        return this.artistFactory.create(mockedKey);
     }
 
     @Override

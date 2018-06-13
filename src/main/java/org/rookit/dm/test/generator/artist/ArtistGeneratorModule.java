@@ -5,16 +5,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
-
-import java.util.Random;
-
-import org.rookit.api.dm.artist.Artist;
-import org.rookit.api.dm.artist.GroupArtist;
-import org.rookit.api.dm.artist.Musician;
-import org.rookit.api.dm.artist.TypeGender;
-import org.rookit.api.dm.artist.TypeGroup;
+import com.neovisionaries.i18n.CountryCode;
+import org.rookit.api.dm.artist.*;
 import org.rookit.test.generator.EnumGenerator;
 import org.rookit.test.generator.Generator;
+
+import java.util.Random;
 
 @SuppressWarnings("javadoc")
 public final class ArtistGeneratorModule extends AbstractModule {
@@ -26,6 +22,11 @@ public final class ArtistGeneratorModule extends AbstractModule {
     @Provides
     private Generator<TypeGroup> getTypeGroupGenerator(final Random random) {
         return new EnumGenerator<>(random, TypeGroup.class);
+    }
+
+    @Provides
+    private Generator<CountryCode> getCountryCodeGenerator(final Random random) {
+        return new EnumGenerator<>(random, CountryCode.class);
     }
 
     @Override

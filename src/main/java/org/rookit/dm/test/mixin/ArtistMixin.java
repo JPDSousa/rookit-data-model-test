@@ -1,20 +1,20 @@
 package org.rookit.dm.test.mixin;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.rookit.api.dm.artist.GroupArtist;
 import org.rookit.api.dm.artist.TypeArtist;
-import org.rookit.api.dm.artist.factory.ArtistFactory;
+import org.rookit.api.dm.artist.factory.GroupArtistFactory;
 import org.rookit.api.dm.artist.key.ArtistKey;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("javadoc")
 public interface ArtistMixin {
     
     default ArtistKey createGroupArtistKey(final String groupName) {
         final ArtistKey mockedKey = mock(ArtistKey.class);
-        when(mockedKey.getArtistType()).thenReturn(TypeArtist.GROUP);
-        when(mockedKey.getName()).thenReturn(groupName);
+        when(mockedKey.type()).thenReturn(TypeArtist.GROUP);
+        when(mockedKey.name()).thenReturn(groupName);
         
         return mockedKey;
     }
@@ -22,10 +22,9 @@ public interface ArtistMixin {
     default GroupArtist createGroupArtist(final String groupName) {
         final ArtistKey artistKey = createGroupArtistKey(groupName);
         
-        return getArtistFactory()
-                .createGroupArtist(artistKey);
+        return getGroupArtistFactory().create(artistKey);
     }
     
-    ArtistFactory getArtistFactory();
+    GroupArtistFactory getGroupArtistFactory();
 
 }

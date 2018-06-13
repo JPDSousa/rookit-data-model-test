@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>rookit-data-model-test</artifactId>
 	<parent>
-		<groupId>com.github.JPDSousa</groupId>
 		<artifactId>rookit</artifactId>
 		<version>-SNAPSHOT</version>
+		<groupId>com.github.JPDSousa</groupId>
 	</parent>
 	<dependencies>
 		<dependency>

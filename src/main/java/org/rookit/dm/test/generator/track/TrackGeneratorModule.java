@@ -6,16 +6,15 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.kekstudio.musictheory.Key;
-
-import java.util.Random;
-
 import org.rookit.api.dm.track.Track;
-import org.rookit.api.dm.track.TrackTitle;
 import org.rookit.api.dm.track.TypeTrack;
 import org.rookit.api.dm.track.TypeVersion;
 import org.rookit.api.dm.track.VersionTrack;
+import org.rookit.api.dm.track.title.Title;
 import org.rookit.test.generator.EnumGenerator;
 import org.rookit.test.generator.Generator;
+
+import java.util.Random;
 
 @SuppressWarnings("javadoc")
 public final class TrackGeneratorModule extends AbstractModule {
@@ -38,7 +37,7 @@ public final class TrackGeneratorModule extends AbstractModule {
         }).to(VersionTrackGenerator.class).in(Singleton.class);
         bind(new TypeLiteral<Generator<Key>>() {
         }).to(KeyGenerator.class);
-        bind(new TypeLiteral<Generator<TrackTitle>>() {
+        bind(new TypeLiteral<Generator<Title>>() {
         }).to(TrackTitleGenerator.class);
     }
 }

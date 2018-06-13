@@ -1,26 +1,23 @@
 
 package org.rookit.dm.test.generator.track;
 
-import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
-import static org.rookit.test.utils.GeneratorUtils.randomlyConsumeCollection;
-
 import com.google.common.base.MoreObjects;
 import com.kekstudio.musictheory.Key;
 import com.tngtech.archunit.thirdparty.com.google.common.collect.ImmutableSet;
-
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Objects;
-
-import javax.annotation.Generated;
-
-import org.bson.types.ObjectId;
 import org.rookit.api.dm.artist.Artist;
 import org.rookit.api.dm.genre.Genre;
 import org.rookit.api.dm.track.Track;
 import org.rookit.dm.test.generator.genre.AbstractGenreableGenerator;
 import org.rookit.test.generator.Generator;
+
+import javax.annotation.Generated;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Objects;
+
+import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
+import static org.rookit.test.utils.GeneratorUtils.randomlyConsumeCollection;
 
 abstract class AbstractTrackGenerator<T extends Track> extends AbstractGenreableGenerator<T> {
 
@@ -31,17 +28,17 @@ abstract class AbstractTrackGenerator<T extends Track> extends AbstractGenreable
     private final Generator<Boolean> booleanGenerator;
     private final Generator<Double> doubleGenerator;
 
-    protected AbstractTrackGenerator(final Generator<ObjectId> idGenerator,
-            final Generator<Artist> artistGenerator,
-            final Generator<Duration> durationGenerator,
-            final Generator<LocalDate> pastGenerator,
-            final Generator<Genre> genreGenerator,
-            final Generator<Key> trackKeyGenerator,
-            final Generator<Long> longGenerator,
-            final Generator<Short> shortGenerator,
-            final Generator<String> stringGenerator,
-            final Generator<Boolean> booleanGenerator,
-            final Generator<Double> doubleGenerator) {
+    AbstractTrackGenerator(final Generator<String> idGenerator,
+                           final Generator<Artist> artistGenerator,
+                           final Generator<Duration> durationGenerator,
+                           final Generator<LocalDate> pastGenerator,
+                           final Generator<Genre> genreGenerator,
+                           final Generator<Key> trackKeyGenerator,
+                           final Generator<Long> longGenerator,
+                           final Generator<Short> shortGenerator,
+                           final Generator<String> stringGenerator,
+                           final Generator<Boolean> booleanGenerator,
+                           final Generator<Double> doubleGenerator) {
         super(idGenerator, durationGenerator, pastGenerator, genreGenerator, longGenerator);
         this.artistGenerator = artistGenerator;
         this.trackKeyGenerator = trackKeyGenerator;
@@ -94,26 +91,17 @@ abstract class AbstractTrackGenerator<T extends Track> extends AbstractGenreable
 
     @Override
     protected final void fillGenreable(final T track) {
-        final Collection<Artist> mainArtists = track.getMainArtists();
+        final Collection<Artist> mainArtists = track.artists().mainArtists();
         final Collection<Artist> features = randomlyConsumeCollection(track::setFeatures,
                 this.artistGenerator, mainArtists);
-        final Collection<Artist> mainArtistsAndFeatures = ImmutableSet.<Artist>builder()
+        final Collection<Artist> mainArtistsFeatures = ImmutableSet.<Artist>builder()
                 .addAll(mainArtists)
                 .addAll(features)
                 .build();
-        randomlyConsumeCollection(track::setProducers, this.artistGenerator, mainArtistsAndFeatures);
+        randomlyConsumeCollection(track::setProducers, this.artistGenerator, mainArtistsFeatures);
 
-        randomlyConsume(track::setHiddenTrack, this.stringGenerator);
-        randomlyConsume(track::setAcoustic, this.booleanGenerator);
         randomlyConsume(track::setExplicit, this.booleanGenerator);
-        randomlyConsume(track::setInstrumental, this.booleanGenerator);
-        randomlyConsume(track::setLive, this.booleanGenerator);
-        randomlyConsume(track::setBpm, this.shortGenerator);
-        randomlyConsume(track::setDanceability, this.doubleGenerator);
-        randomlyConsume(track::setEnergy, this.doubleGenerator);
-        randomlyConsume(track::setValence, this.doubleGenerator);
         randomlyConsume(track::setLyrics, this.stringGenerator);
-        randomlyConsume(track::setTrackKey, this.trackKeyGenerator);
         fillTrack(track);
     }
 

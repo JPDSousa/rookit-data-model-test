@@ -1,59 +1,58 @@
 
 package org.rookit.dm.test.generator.track;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
 import com.kekstudio.musictheory.Key;
-
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.Set;
-
-import javax.annotation.Generated;
-
-import org.bson.types.ObjectId;
 import org.rookit.api.dm.artist.Artist;
 import org.rookit.api.dm.genre.Genre;
 import org.rookit.api.dm.track.Track;
 import org.rookit.api.dm.track.TypeVersion;
 import org.rookit.api.dm.track.VersionTrack;
-import org.rookit.api.dm.track.factory.TrackFactory;
+import org.rookit.api.dm.track.factory.VersionTrackFactory;
 import org.rookit.api.dm.track.key.TrackKey;
+import org.rookit.dm.test.generator.IdGenerator;
 import org.rookit.test.generator.Generator;
 
-class VersionTrackGenerator extends AbstractTrackGenerator<VersionTrack> {
+import javax.annotation.Generated;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
-    private final TrackFactory trackFactory;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+final class VersionTrackGenerator extends AbstractTrackGenerator<VersionTrack> {
+
+    private final VersionTrackFactory trackFactory;
     private final Generator<Track> originalTrackGenerator;
     private final Generator<TypeVersion> typeVersionGenerator;
     private final Generator<Artist> artistGenerator;
     private final Generator<String> stringGenerator;
 
     @Inject
-    private VersionTrackGenerator(final Generator<ObjectId> idGenerator,
+    private VersionTrackGenerator(@IdGenerator final Generator<String> idGenerator,
             final Generator<Artist> artistGenerator,
             final Generator<Duration> durationGenerator,
             final Generator<LocalDate> pastGenerator,
             final Generator<Genre> genreGenerator,
             final Generator<Key> trackKeyGenerator,
-            final Generator<Track> originalTrackGenerator,
+            final Generator<Track> orTrackGenerator,
             final Generator<TypeVersion> typeVersionGenerator,
             final Generator<Long> longGenerator,
             final Generator<Short> shortGenerator,
             final Generator<String> stringGenerator,
             final Generator<Boolean> booleanGenerator,
             final Generator<Double> doubleGenerator,
-            final TrackFactory trackFactory) {
+            final VersionTrackFactory trackFactory) {
         super(idGenerator, artistGenerator, durationGenerator, pastGenerator, genreGenerator, trackKeyGenerator,
                 longGenerator, shortGenerator, stringGenerator, booleanGenerator, doubleGenerator);
         this.stringGenerator = stringGenerator;
         this.artistGenerator = artistGenerator;
         this.trackFactory = trackFactory;
-        this.originalTrackGenerator = originalTrackGenerator;
+        this.originalTrackGenerator = orTrackGenerator;
         this.typeVersionGenerator = typeVersionGenerator;
     }
 
@@ -104,11 +103,11 @@ class VersionTrackGenerator extends AbstractTrackGenerator<VersionTrack> {
 
         final TrackKey mockedKey = mock(TrackKey.class);
         when(mockedKey.getVersionType()).thenReturn(typeVersion);
-        when(mockedKey.getVersionToken()).thenReturn(versionToken);
+        when(mockedKey.versionToken()).thenReturn(Optional.of(versionToken));
         when(mockedKey.getVersionArtists()).thenReturn(artists);
-        when(mockedKey.getOriginal()).thenReturn(original);
+        when(mockedKey.original()).thenReturn(original);
 
-        return this.trackFactory.createVersionTrack(mockedKey);
+        return this.trackFactory.create(mockedKey);
     }
 
     @Override

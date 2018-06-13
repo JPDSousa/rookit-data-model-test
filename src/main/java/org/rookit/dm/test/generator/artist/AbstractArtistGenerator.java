@@ -1,39 +1,40 @@
 
 package org.rookit.dm.test.generator.artist;
 
-import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
-import static org.rookit.test.utils.GeneratorUtils.randomlyConsumeCollection;
-
 import com.google.common.base.MoreObjects;
-
-import java.time.Duration;
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.Optional;
-
-import javax.annotation.Generated;
-
-import org.bson.types.ObjectId;
+import com.neovisionaries.i18n.CountryCode;
 import org.rookit.api.dm.artist.Artist;
 import org.rookit.api.dm.genre.Genre;
 import org.rookit.dm.test.generator.genre.AbstractGenreableGenerator;
 import org.rookit.test.generator.Generator;
 
+import javax.annotation.Generated;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.Optional;
+
+import static org.rookit.test.utils.GeneratorUtils.randomlyConsume;
+import static org.rookit.test.utils.GeneratorUtils.randomlyConsumeCollection;
+
 abstract class AbstractArtistGenerator<T extends Artist> extends AbstractGenreableGenerator<T> {
 
     private final Generator<String> stringGenerator;
     private final Generator<byte[]> byteArrayGenerator;
+    private final Generator<CountryCode> countryCodeGenerator;
 
-    protected AbstractArtistGenerator(final Generator<ObjectId> idGenerator,
-            final Generator<Duration> durationGenerator,
-            final Generator<LocalDate> pastGenerator,
-            final Generator<Genre> genreGenerator,
-            final Generator<Long> longGenerator,
-            final Generator<String> stringGenerator,
-            final Generator<byte[]> byteArrayGenerator) {
+    AbstractArtistGenerator(final Generator<String> idGenerator,
+                            final Generator<Duration> durationGenerator,
+                            final Generator<LocalDate> pastGenerator,
+                            final Generator<Genre> genreGenerator,
+                            final Generator<Long> longGenerator,
+                            final Generator<String> stringGenerator,
+                            final Generator<byte[]> byteArrayGenerator,
+                            final Generator<CountryCode> countryCodeGenerator) {
         super(idGenerator, durationGenerator, pastGenerator, genreGenerator, longGenerator);
         this.stringGenerator = stringGenerator;
         this.byteArrayGenerator = byteArrayGenerator;
+        this.countryCodeGenerator = countryCodeGenerator;
     }
 
     @Override
@@ -57,18 +58,8 @@ abstract class AbstractArtistGenerator<T extends Artist> extends AbstractGenreab
         return Objects.hash(super.hashCode(), this.stringGenerator, this.byteArrayGenerator);
     }
 
-    @Override
-    @Generated(value = "GuavaEclipsePlugin")
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("super", super.toString())
-                .add("stringGenerator", this.stringGenerator)
-                .add("byteArrayGenerator", this.byteArrayGenerator)
-                .toString();
-    }
-
     private void setEndDate(final T artist, final LocalDate date) {
-        final Optional<LocalDate> beginDateOrNone = artist.getBeginDate();
+        final Optional<LocalDate> beginDateOrNone = artist.profile().timeline().begin();
         final LocalDate endDate;
         if (beginDateOrNone.isPresent()) {
             final LocalDate beginDate = beginDateOrNone.get();
@@ -93,9 +84,17 @@ abstract class AbstractArtistGenerator<T extends Artist> extends AbstractGenreab
 
         randomlyConsumeCollection(artist::setAliases, this.stringGenerator);
         randomlyConsume(artist::setIPI, this.stringGenerator);
-        randomlyConsume(artist::setOrigin, this.stringGenerator);
+        randomlyConsume(artist::setOrigin, this.countryCodeGenerator);
         randomlyConsume(artist::setPicture, this.byteArrayGenerator);
         fillArtist(artist);
     }
 
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("stringGenerator", this.stringGenerator)
+                .add("byteArrayGenerator", this.byteArrayGenerator)
+                .add("countryCodeGenerator", this.countryCodeGenerator)
+                .toString();
+    }
 }

@@ -13,10 +13,10 @@ import org.rookit.api.dm.factory.RookitFactories;
 import org.rookit.api.dm.genre.factory.GenreFactory;
 import org.rookit.api.dm.play.factory.PlaylistFactory;
 import org.rookit.api.dm.track.factory.TrackFactory;
-import org.rookit.test.AbstractTest;
+import org.rookit.test.AbstractUnitTest;
 
 @SuppressWarnings("javadoc")
-public class DataModelTestFactoryTest extends AbstractTest<DataModelTestFactory> {
+public class DataModelTestFactoryTest extends AbstractUnitTest<DataModelTestFactory> {
 
     private static Injector INJECTOR = Guice.createInjector(DataModelTestFactory.getModule(), new AbstractModule() {
 

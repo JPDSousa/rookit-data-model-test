@@ -3,28 +3,29 @@ package org.rookit.dm.test.generator.track;
 
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
-
-import java.util.Objects;
-
-import javax.annotation.Generated;
-
-import org.rookit.api.dm.track.TrackTitle;
+import org.rookit.api.dm.track.title.Title;
+import org.rookit.api.dm.track.title.TitleFactory;
 import org.rookit.test.generator.AbstractGenerator;
 import org.rookit.test.generator.Generator;
 
-class TrackTitleGenerator extends AbstractGenerator<TrackTitle> {
+import javax.annotation.Generated;
+import java.util.Objects;
 
+final class TrackTitleGenerator extends AbstractGenerator<Title> {
+
+    private final TitleFactory factory;
     private final Generator<String> stringGenerator;
 
     @Inject
-    private TrackTitleGenerator(final Generator<String> stringGenerator) {
-        super();
+    private TrackTitleGenerator(final TitleFactory factory,
+                                final Generator<String> stringGenerator) {
+        this.factory = factory;
         this.stringGenerator = stringGenerator;
     }
 
     @Override
-    public TrackTitle createRandom() {
-        return new TrackTitle(this.stringGenerator.createRandom());
+    public Title createRandom() {
+        return this.factory.create(this.stringGenerator.createRandom());
     }
 
     @Override

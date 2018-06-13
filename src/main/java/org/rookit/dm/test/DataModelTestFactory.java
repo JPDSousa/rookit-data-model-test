@@ -26,13 +26,6 @@ import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
-
-import javax.annotation.Generated;
-
 import org.rookit.api.dm.album.Album;
 import org.rookit.api.dm.album.TypeRelease;
 import org.rookit.api.dm.artist.Artist;
@@ -41,10 +34,10 @@ import org.rookit.api.dm.artist.Musician;
 import org.rookit.api.dm.genre.Genre;
 import org.rookit.api.dm.play.Playlist;
 import org.rookit.api.dm.track.Track;
-import org.rookit.api.dm.track.TrackTitle;
 import org.rookit.api.dm.track.TypeTrack;
 import org.rookit.api.dm.track.TypeVersion;
 import org.rookit.api.dm.track.VersionTrack;
+import org.rookit.api.dm.track.title.Title;
 import org.rookit.dm.test.generator.RookitGeneratorModule;
 import org.rookit.dm.test.generator.album.AlbumGeneratorModule;
 import org.rookit.dm.test.generator.artist.ArtistGeneratorModule;
@@ -53,6 +46,11 @@ import org.rookit.dm.test.generator.play.PlaylistGeneratorModule;
 import org.rookit.dm.test.generator.track.TrackGeneratorModule;
 import org.rookit.test.generator.BaseGeneratorModule;
 import org.rookit.test.generator.Generator;
+
+import javax.annotation.Generated;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 @SuppressWarnings("javadoc")
 public final class DataModelTestFactory {
@@ -78,7 +76,7 @@ public final class DataModelTestFactory {
     private final Generator<VersionTrack> versionTracks;
     private final Generator<TypeVersion> typeVersions;
     private final Generator<TypeTrack> typeTracks;
-    private final Generator<TrackTitle> trackTitles;
+    private final Generator<Title> trackTitles;
 
     private final Generator<Genre> genres;
     private final Generator<GroupArtist> groupArtists;
@@ -99,7 +97,7 @@ public final class DataModelTestFactory {
             final Generator<Artist> artists,
             final Generator<Album> albums,
             final Generator<Playlist> playlists,
-            final Generator<TrackTitle> trackTitles,
+            final Generator<Title> trackTitles,
             final Generator<TypeRelease> releaseTypes) {
         this.releaseTypes = releaseTypes;
         this.genres = genres;
@@ -197,7 +195,7 @@ public final class DataModelTestFactory {
                 .toString();
     }
 
-    public Generator<TrackTitle> trackTitles() {
+    public Generator<Title> trackTitles() {
         return this.trackTitles;
     }
 
